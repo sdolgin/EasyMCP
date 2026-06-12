@@ -113,6 +113,19 @@ servers (a bare `"url"` entry is ignored), so use the `mcp-remote` bridge.
 
 Fully quit Claude Desktop (system tray → Quit) and relaunch.
 
+### Alternative: pull the prebuilt image from GHCR
+
+Every push to `main` publishes `ghcr.io/sdolgin/easymcp:latest` (amd64 + arm64) via
+GitHub Actions. To deploy by pulling instead of building, replace the `build: .` line
+in `docker-compose.yml` with nothing and point `image:` at GHCR:
+
+```yaml
+    image: ghcr.io/sdolgin/easymcp:latest
+```
+
+then update with `sudo docker-compose pull && sudo docker-compose up -d`.
+(If the GHCR package is private, `sudo docker login ghcr.io` with a GitHub PAT first.)
+
 ## Maintenance runbook
 
 | Task | Command (on the NAS) |
