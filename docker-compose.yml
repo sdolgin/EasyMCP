@@ -1,0 +1,21 @@
+services:
+  easynews-mcp:
+    build: .
+    image: easynews-mcp:latest
+    container_name: easynews-mcp
+    restart: unless-stopped
+    # Match the uid:gid that owns the NZBGet watch folder on the NAS —
+    # Synology ACLs deny writes from uids that aren't real DSM users.
+    user: "1028:100"
+    ports:
+      - "8765:8765"
+    env_file:
+      - .env
+    volumes:
+      - /volume1/Incoming/nzbget/downloads/nzb:/downloads/nzb
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8765/health', timeout=4)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
