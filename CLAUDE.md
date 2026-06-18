@@ -22,9 +22,9 @@
 
 ```bash
 # Local dev
-python -m venv venv && venv\Scripts\activate
+python -m venv venv && source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-copy .env.example .env   # fill EASYNEWS_USERNAME, EASYNEWS_PASSWORD
+cp .env.example .env   # fill EASYNEWS_USERNAME, EASYNEWS_PASSWORD (Windows: copy .env.example .env)
 python test_client.py    # 4 smoke tests (live API — needs real credentials)
 python server.py         # starts on :8765
 
