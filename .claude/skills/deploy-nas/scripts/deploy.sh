@@ -24,4 +24,9 @@ ssh -p "${SSH_PORT}" "${NAS_USER}@${NAS_IP}" "
 "
 
 echo "==> Verifying health endpoint..."
-curl -sf "http://${NAS_IP}:8765/health" && echo " OK" || echo " FAILED — check container logs"
+if curl -sf --max-time 5 "http://${NAS_IP}:8765/health" >/dev/null; then
+  echo " OK"
+else
+  echo " FAILED — check container logs" >&2
+  exit 1
+fi
