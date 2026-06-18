@@ -126,8 +126,8 @@ async def nzb_proxy(request: Request) -> Response:
 
 
 if __name__ == "__main__":
-    print(f"[easynews-mcp] Transport: SSE  Host: {HOST}  Port: {PORT}", file=sys.stderr)
+    print(f"[easynews-mcp] Transport: streamable-http  Host: {HOST}  Port: {PORT}", file=sys.stderr)
     print(f"[easynews-mcp] NZB download path: {DOWNLOAD_PATH}", file=sys.stderr)
     print(f"[easynews-mcp] Public URL for NZB links: {PUBLIC_URL}", file=sys.stderr)
     print(f"[easynews-mcp] Credentials loaded: {'yes' if CREDS_OK else 'NO — set EASYNEWS_USERNAME/EASYNEWS_PASSWORD'}", file=sys.stderr)
-    mcp.run(transport="sse")
+    mcp.run(transport="streamable-http")

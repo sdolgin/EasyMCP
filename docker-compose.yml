@@ -1,7 +1,6 @@
 services:
   easynews-mcp:
-    build: .
-    image: easynews-mcp:latest
+    image: ghcr.io/sdolgin/easymcp:latest
     container_name: easynews-mcp
     restart: unless-stopped
     # Match the uid:gid that owns the NZBGet watch folder on the NAS —
