@@ -17,24 +17,28 @@ fi
 : "${EASYNEWS_PASSWORD:?Set EASYNEWS_PASSWORD}"
 
 echo "==> Running search for '${QUERY}'..."
-python -c "
+python - "$QUERY" <<'PY'
 from easynews_client import search, fetch_nzb
-results = search('${QUERY}', max_results=1)
+import sys
+
+query = sys.argv[1]
+results = search(query, max_results=1)
 if not results:
-    print('No results found'); exit(1)
+    print("No results found")
+    raise SystemExit(1)
 r = results[0]
-print(f'Result: {r[\"filename\"]}')
-print(f'ID: {r[\"id\"][:80]}...')
-token, _, sig = r['id'].partition('&sig=')
-print(f'Sig present: {bool(sig)}')
-print(f'Sig value: {sig[:20]}...' if sig else 'Sig: MISSING')
-content, name = fetch_nzb(r['id'])
-print(f'NZB size: {len(content)} bytes')
-print(f'Has <nzb>: {b\"<nzb\" in content[:1024]}')
-print(f'Has <file>: {b\"<file\" in content}')
-if b'<file' in content:
-    print('OK — NZB is valid with file entries')
+print(f"Result: {r['filename']}")
+print(f"ID: {r['id'][:80]}...")
+token, _, sig = r["id"].partition("&sig=")
+print(f"Sig present: {bool(sig)}")
+print(f"Sig value: {sig[:20]}..." if sig else "Sig: MISSING")
+content, name = fetch_nzb(r["id"])
+print(f"NZB size: {len(content)} bytes")
+print(f"Has <nzb>: {b'<nzb' in content[:1024]}")
+print(f"Has <file>: {b'<file' in content}")
+if b"<file" in content:
+    print("OK — NZB is valid with file entries")
 else:
-    print('FAIL — NZB is an empty skeleton (sig may be invalid)')
-    exit(1)
-"
+    print("FAIL — NZB is an empty skeleton (sig may be invalid)")
+    raise SystemExit(1)
+PY
